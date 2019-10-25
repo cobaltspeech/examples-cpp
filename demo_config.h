@@ -26,9 +26,11 @@ class DemoConfig
 public:
     /*
      * Parse the command-line arguments given to application at startup
-     * and return the configuration based on the args. It is expecting
-     * "-config <path/to/config.toml>" to be included in the arguments and
-     * throws an exception if they are not (or if there are errors parsing).
+     * and return the configuration based on the args. If there are no
+     * arguments, it assumes there is a default file called config.toml to
+     * exist. Otherwise, it expects "-config <path/to/config.toml>" to be
+     * included in the arguments. This function throws an exception if 
+     * it encounters an error.
      */
     static DemoConfig parseApplicationArgs(int argc, char *argv[]);
 

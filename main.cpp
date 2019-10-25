@@ -54,8 +54,7 @@ std::string extractTranscript(const cobaltspeech::cubic::RecognitionResponse &re
             continue;
 
         // Just use the first alternative for now.
-        std::string raw_transcript = result.alternatives(0).transcript();
-        transcript += raw_transcript + " ";
+        transcript += result.alternatives(0).transcript() + " ";
     }
 
     std::regex trim("^\\s+|\\s+$");
