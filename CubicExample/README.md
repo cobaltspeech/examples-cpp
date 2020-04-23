@@ -4,12 +4,20 @@ This directory contains an example showing how to use the Cubic C++ SDK.
 
 ## Build
 The example uses [CMake](www.cmake.org) as the build system. To compile,
-do the following:
+do the following, assuming that the variable $SRC refers to this directory
+and $BUILD refers to the directory where you the binary should be built. 
+
 ```bash
-cd <build_dir>
+# Download the sdk-cubic repo to this directory
+cd $SRC
+git clone https://github.com/cobaltspeech/sdk-cubic.git
+
+# Create the build directory if it doesn't exist and move to it.
+mkdir -p $BUILD
+cd $BUILD
 
 # Run CMake. This will also download dependencies (cpptoml and gRPC)
-cmake -DCMAKE_BUILD_TYPE=Release <path/to/sdk-cubic/examples/cpp>
+cmake -DCMAKE_BUILD_TYPE=Release $SRC
 
 # Compile the project
 make -j <num cpu>

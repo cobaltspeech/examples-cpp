@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
 # Add the cubic client code as a subdirectory
-add_subdirectory(../../grpc/cpp-cubic cpp-cubic)
+add_subdirectory(sdk-cubic/grpc/cpp-cubic cpp-cubic)
 
 # Add third party dependencies
 add_subdirectory(thirdParty)

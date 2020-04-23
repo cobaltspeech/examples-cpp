@@ -17,6 +17,7 @@
 #include "recorder.h"
 
 #include <unistd.h>
+#include <stdexcept>
 
 Recorder::Recorder(const std::string &record_cmd, size_t maxBuffSize)
     : mCmd(record_cmd), mBufferSize(maxBuffSize), mStdout(nullptr)
