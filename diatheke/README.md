@@ -2,7 +2,7 @@
 This directory contains code demonstrating how to use the [Diatheke SDK](https://sdk-diatheke.cobaltspeech.com).
 
 ## Build
-Like the SDK, these examples use [CMake](https://cmake.org/) to manage to build process. CMake will automatically download the correct version of the SDK and the gRPC code required to use the SDK.
+Like the SDK, these examples use [CMake](https://cmake.org/) to manage the build process. CMake will automatically download the correct version of the SDK and the gRPC code required to use the SDK.
 
 ```bash
 # Create the build directory
