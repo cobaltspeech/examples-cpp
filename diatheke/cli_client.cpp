@@ -130,7 +130,6 @@ int main(int argc, char *argv[]) {
   }
 
   // Create a session
-  std::string modelID = "1";
   auto session = client.createSession(modelID);
 
   try {
