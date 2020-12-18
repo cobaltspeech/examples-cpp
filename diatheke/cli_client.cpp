@@ -107,43 +107,44 @@ DiathekeSession processActions(Diatheke::Client *client,
 }
 
 int main(int argc, char *argv[]) {
-  // Create the client
-  Diatheke::Client client(serverAddress, insecureConnection);
-
-  // Request the server version info
-  auto ver = client.version();
-  std::cout << "Server Version" << std::endl;
-  std::cout << "  Diatheke: " << ver.diatheke() << std::endl;
-  std::cout << "  Chosun (NLU): " << ver.chosun() << std::endl;
-  std::cout << "  Cubic (ASR): " << ver.cubic() << std::endl;
-  std::cout << "  Luna (TTS): " << ver.luna() << std::endl;
-
-  // Request the list of available models
-  auto modelList = client.listModels();
-  std::cout << "\nAvailable Models:" << std::endl;
-  for (auto &mdl : modelList.models()) {
-    std::cout << "  ID: " << mdl.id() << std::endl;
-    std::cout << "    Name: " << mdl.name() << std::endl;
-    std::cout << "    Language: " << mdl.language() << std::endl;
-    std::cout << "    ASR Sample Rate: " << mdl.asr_sample_rate() << std::endl;
-    std::cout << "    TTS Sample Rate: " << mdl.tts_sample_rate() << std::endl;
-  }
-
-  // Create a session
-  auto session = client.createSession(modelID);
-
   try {
+    // Create the client
+    Diatheke::Client client(serverAddress, insecureConnection);
+
+    // Request the server version info
+    auto ver = client.version();
+    std::cout << "Server Version" << std::endl;
+    std::cout << "  Diatheke: " << ver.diatheke() << std::endl;
+    std::cout << "  Chosun (NLU): " << ver.chosun() << std::endl;
+    std::cout << "  Cubic (ASR): " << ver.cubic() << std::endl;
+    std::cout << "  Luna (TTS): " << ver.luna() << std::endl;
+
+    // Request the list of available models
+    auto modelList = client.listModels();
+    std::cout << "\nAvailable Models:" << std::endl;
+    for (auto &mdl : modelList.models()) {
+      std::cout << "  ID: " << mdl.id() << std::endl;
+      std::cout << "    Name: " << mdl.name() << std::endl;
+      std::cout << "    Language: " << mdl.language() << std::endl;
+      std::cout << "    ASR Sample Rate: " << mdl.asr_sample_rate() << std::endl;
+      std::cout << "    TTS Sample Rate: " << mdl.tts_sample_rate() << std::endl;
+    }
+
+    // Create a session
+    auto session = client.createSession(modelID);
+
     // Loop forever (or until the program is killed)
     while (true) {
       session = processActions(&client, session);
     }
+
+    // Clean up the session.
+    client.deleteSession(session.token());
   } catch (const Diatheke::ClientError &e) {
     std::cout << "Diatheke Error: " << e.what() << std::endl;
   } catch (const std::exception &e) {
     std::cout << "Error: " << e.what() << std::endl;
   }
 
-  // Clean up the session.
-  client.deleteSession(session.token());
   return 0;
 }
