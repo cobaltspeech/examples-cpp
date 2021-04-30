@@ -2,9 +2,13 @@
 Examples of calling Cobalt's C++ SDKs.
 
 ## CubicExample
-The /CubicExample folder contains code for calling Cobalt's Automatic Speach Recognition system, Cubic.  It is a simple client that pipes audio from an external app's stdout and calls the specified Cubic Server instance to transcribe it. 
+The [cubic](./cubic) folder contains four example clients for calling Cobalt's Automatic Speach Recognition system, Cubic.
+* [synchronous_client](./cubic/synchronous_client.cpp), which demonstrates synchronous speech recognition.
+* [stream_client](./cubic/stream_client.cpp), which demonstrates streaming speech recognition.
+* [context_client](./cubic/context_client.cpp), which demonstrates streaming ASR using context lists to improve speech recognition for specific words or phrases.
+* [mic_client](./cubic/mic_client.cpp), which demonstrates streaming ASR using a microphone for audio input.
 
-It uses the SDK documented [here](https://sdk-cubic.cobaltspeech.com/).
+See [here](./cubic/README.md) for more details about the examples, and [here](https://sdk-cubic.cobaltspeech.com/) for the SDK documentation.
 
 ## Diatheke Example
 The [diatheke](./diatheke) folder contains two example clients that interact with Diatheke.

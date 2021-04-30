@@ -36,10 +36,10 @@ cd <path/to/build/>
 ```
 
 ## Audio I/O
-For the `audio_client` example, the audio I/O is handled exclusively by external applications such as aplay/arecord or sox. The specific application can be anything as long the following conditions are met:
+For the `audio_client` example, the audio I/O is handled exclusively by external applications such as aplay/arecord or sox. The specific application can be anything as long as the following conditions are met:
 
 * The application supports the encodings, sample rate, bit-depth, etc. required by the underlying Cubic ASR and Luna TTS models.
 * For recording, the application must stream audio data to stdout.
 * For playback, the application must accept audio data from stdin.
 
-The specific applications (and their args) should be specified as strings in the code (the `recordCmd` and `playCmd` variables).
+The specific applications (and their args) should be specified as strings in the code (the `recordCmd` and `playCmd` variables). When integrating the Diatheke SDK with your application, it is recommended to use your preferred C++ library to handle the audio I/O.
