@@ -29,7 +29,7 @@ namespace CubicPB = cobaltspeech::cubic;
 
 // Some useful variables to define the client configuration
 const std::string serverAddress = "localhost:2727";
-const std::string filename = "test.wav";
+const std::string filename = "test.raw";
 
 // This client demonstrates using synchronous recognition.
 int main(int argc, char *argv[]) {
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
         auto modelID = models[0].id();
         CubicPB::RecognitionConfig cfg;
         cfg.set_model_id(modelID);
-        cfg.set_audio_encoding(CubicPB::RecognitionConfig::WAV);
+        cfg.set_audio_encoding(CubicPB::RecognitionConfig::RAW_LINEAR16);
 
         // Read the entire audio file
         std::ifstream infile(filename);
