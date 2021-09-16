@@ -1,5 +1,5 @@
 /*
- * Copyright (2020) Cobalt Speech and Language, Inc.
+ * Copyright (2021) Cobalt Speech and Language, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 #define PLAYER_H
 
 #include <cstdio>
-#include <diatheke_tts_stream.h>
+#include <diatheke_audio_helpers.h>
 #include <string>
 #include <vector>
 

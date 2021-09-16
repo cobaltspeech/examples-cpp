@@ -1,5 +1,5 @@
 /*
- * Copyright (2020) Cobalt Speech and Language, Inc.
+ * Copyright (2021) Cobalt Speech and Language, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,6 +82,18 @@ DiathekeSession handleCommand(Diatheke::Client *client,
 }
 
 /*
+ * Print the transcribe action, but otherwise does nothing.
+ */
+void handleTranscribe(const DiathekePB::TranscribeAction &scribe) {
+  // Print the action info
+  std::cout << std::endl;
+  std::cout << "  Transcribe:" << std::endl;
+  std::cout << "    ID: " << scribe.id() << std::endl;
+  std::cout << "    Cubic Model ID: " << scribe.cubic_model_id() << std::endl;
+  std::cout << "    Diatheke Model ID: " << scribe.diatheke_model_id() << std::endl;
+}
+
+/*
  * Executes the actions for the given session and returns
  * an updated session.
  */
@@ -98,6 +110,9 @@ DiathekeSession processActions(Diatheke::Client *client,
     } else if (action.has_command()) {
       // The CommandAction will involve a session update.
       return handleCommand(client, session, action.command());
+    } else if (action.has_transcribe()) {
+      // Transcribe actions do not require a session update.
+      handleTranscribe(action.transcribe());
     } else {
       throw std::runtime_error("received unknown action type");
     }
@@ -108,8 +123,9 @@ DiathekeSession processActions(Diatheke::Client *client,
 
 int main(int argc, char *argv[]) {
   try {
-    // Create the client
-    Diatheke::Client client(serverAddress, insecureConnection);
+    // Create the client. Note this is an insecure connection,
+    // which is not recommended for production.
+    Diatheke::Client client(serverAddress);
 
     // Request the server version info
     auto ver = client.version();
