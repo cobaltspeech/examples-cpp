@@ -1,5 +1,5 @@
 /*
- * Copyright (2020) Cobalt Speech and Language, Inc.
+ * Copyright (2021) Cobalt Speech and Language, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ const std::string recordCmd = "sox -q -d -c 1 -r 16000 -b 16 -L -e signed -t raw
 const std::string playCmd = "sox -q -c 1 -r 48000 -b 16 -L -e signed -t raw - -d";
 
 /*
- * Prompts the user for text input, then returns an updated
- * session based on the user-supplied text.
+ * Records user audio, then returns an updated session based
+ * on the ASR result.
  */
 DiathekeSession waitForInput(Diatheke::Client *client,
                              const DiathekeSession &session,
@@ -115,6 +115,49 @@ void handleReply(Diatheke::Client *client,
 }
 
 /*
+ * Records user audio for the purpose of transcription.
+ */
+void handleTranscribe(Diatheke::Client *client,
+                      const DiathekePB::TranscribeAction &scribe) {
+  Diatheke::TranscribeStream stream = client->newTranscribeStream(scribe);
+
+  // Create the result callback function
+  std::string finalTranscription("");
+  auto cb = [&finalTranscription](const DiathekePB::TranscribeResult &result) {
+    /*
+     * Print the result on the same line (overwrite current contents).
+     * Note that this assumes stdout is going to a terminal.
+     */
+    std::cout << "\r" << result.text()
+              << " (confidence: " << result.confidence() << ")"
+              << std::flush;
+
+    if (result.is_partial()) {
+      return;
+    }
+
+    /*
+     * As this is the final result (non-partial), go to the next line
+     * in preparation for the next result.
+     */
+    std::cout << std::endl;
+
+    // Accumulate all non-partial transcriptions here.
+    finalTranscription += result.text();
+  };
+
+  // Start the recorder
+  Recorder recorder(recordCmd);
+  recorder.start();
+  std::cout << "\nRecording transcription..." << std::endl;
+
+  // Run the transcription
+  Diatheke::ReadTranscribeAudio(stream, &recorder, 8192, cb);
+
+  std::cout << "\nFinal Transcription: " << finalTranscription << std::endl;
+}
+
+/*
  * Executes the task specified by the given command and
  * returns an updated session based on the command result.
  */
@@ -154,6 +197,9 @@ DiathekeSession processActions(Diatheke::Client *client,
     } else if (action.has_command()) {
       // The CommandAction will involve a session update.
       return handleCommand(client, session, action.command());
+    } else if (action.has_transcribe()) {
+      // Transcribe actions do not require a session update.
+      handleTranscribe(client, action.transcribe());
     } else {
       throw std::runtime_error("received unknown action type");
     }
@@ -165,8 +211,9 @@ DiathekeSession processActions(Diatheke::Client *client,
 
 int main(int argc, char *argv[]) {
   try {
-    // Create the client
-    Diatheke::Client client(serverAddress, insecureConnection);
+    // Create the client. Note this is an insecure connection,
+    // which is not recommended for production.
+    Diatheke::Client client(serverAddress);
 
     // Print the server version info
     auto ver = client.version();
